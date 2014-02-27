@@ -1,0 +1,2 @@
+# This yaml file is for setting the configurations for Word-search
+dictionary_path: data/words.txt
