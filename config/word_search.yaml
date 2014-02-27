@@ -1,2 +1,6 @@
 # This yaml file is for setting the configurations for Word-search
+# Parameters
+#   dictionary_path = path to the dictionary file.
+#   token_size = size of the token to create. Must be an Integer greater than zero (0).
 dictionary_path: data/words.txt
+token_size: 4
