@@ -2,5 +2,9 @@
 # Parameters
 #   dictionary_path = path to the dictionary file.
 #   token_size = size of the token to create. Must be an Integer greater than zero (0).
+#   char_clean = type of characters to remove from the tokens. If left blank none will be removed.
+#                Spaces will always be removed. Options: numbers, non-word, both.
+#
 dictionary_path: data/words.txt
 token_size: 4
+char_clean: both

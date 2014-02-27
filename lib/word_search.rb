@@ -5,6 +5,7 @@ class WordSearch
   WS_CONFIG = YAML.load_file("config/word_search.yaml")
   DICTIONARY_PATH = WS_CONFIG["dictionary_path"]
   TOKEN_SIZE = WS_CONFIG["token_size"]
+  CHAR_CLEAN = WS_CONFIG["char_clean"]
   
   # Initialize a WordSearch object. Requires a valid file path be passed in. Defaults to dictionary_path
   # in config/word_search.yaml.
@@ -45,5 +46,30 @@ class WordSearch
     end
     
     return token_array
-  end  
+  end
+  
+  # This method takes a String and an Array of tokens to convert them into a reverse index Hash. 
+  # The tokens are the keys and the string is the value. Takes a String and Array. Returns Hash.
+  def indexer(str, arr)
+    token_index = Hash[arr.map {|x| [x, str]}]
+    return token_index
+  end
+  
+  # This method takes a String and removes the requested character set from it. Defaults to char_clean
+  # in config/word_search.yaml. Takes a String and an optional String. Returns String.
+  def cleaner(str,char_to_clean = CHAR_CLEAN)
+    case char_to_clean
+      when "numbers"
+        clean_str = str.gsub(/\d/,"")
+      when "non-word"
+        clean_str = str.gsub(/\W/,"")
+      when "both"
+        clean_str = str.gsub(/\d/,"").gsub(/\W/,"")
+      else
+        # Remove nothing.
+    end
+    # Remove any white spaces.
+    clean_str.gsub!(" ","")
+    return clean_str                
+  end   
 end
