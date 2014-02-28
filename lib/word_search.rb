@@ -6,6 +6,12 @@ class WordSearch
   DICTIONARY_PATH = WS_CONFIG["dictionary_path"]
   TOKEN_SIZE = WS_CONFIG["token_size"]
   CHAR_CLEAN = WS_CONFIG["char_clean"]
+  WS_CONFIG["output_dir"] ||= "tmp"
+  OUTPUT_DIR = WS_CONFIG["output_dir"]
+  WS_CONFIG["token_filename"] ||= "questions.txt"
+  TOKEN_FILENAME = WS_CONFIG["token_filename"]
+  WS_CONFIG["word_filename"] ||= "answers.txt"
+  WORD_FILENAME = WS_CONFIG["word_filename"]
   
   # Initialize a WordSearch object. Requires a valid file path be passed in. Defaults to dictionary_path
   # in config/word_search.yaml.
@@ -21,18 +27,43 @@ class WordSearch
     end    
   end
   
-  # This method creates the token index. It takes optional Fixnum and String to override default token_size and char_clean repsectively. 
+  # This method creates the token index. It takes optional Fixnum and String arguements to override default token_size and char_clean repsectively. 
   # Returns a Hash. Defaults are set in config/word_search.yaml.
   def create_index(token_size = TOKEN_SIZE, char_clean = CHAR_CLEAN)
     token_index = {}
     @dictionary_file.each_line do |line|
       org_value = line.gsub(/\s/,"")
-      clean_str = cleaner(line,char_clean)
-      token_arr = tokenizer(clean_str, token_size)
-      line_index = indexer(org_value, token_arr)
-      token_index = token_index.merge(line_index){|key,oldval,newval| oldval << newval[0] }
+      unless org_value.empty?
+        clean_str = cleaner(line,char_clean)
+        token_arr = tokenizer(clean_str, token_size)
+        line_index = indexer(org_value, token_arr)
+        token_index = token_index.merge(line_index){|key,oldval,newval| oldval << newval[0] }
+      end
     end
+    # Sort the resulting Hash alphabetically by key. Return the newly sorted Hash.
+    arr_tmp = token_index.sort_by{|key, value| key}.flatten(1)
+    token_index = Hash[*arr_tmp]
     return token_index
+  end
+  
+  # This method generates the question and answer files from the Hash returned by create_index. The Hash has all key/value pairs removed
+  # where the value Array has a size greater than 1. The remaining key/value pairs are output into two files; keys to questions.txt and 
+  # values to answers.txt with each line of the file holding a single key or value respectively. The keys will be unique while the values 
+  # might not be. The method takes optional Fixnum and String arguements to override default token_size and char_clean repsectively. 
+  # Defaults are set in config/word_search.yaml.
+  def q_and_a(token_size = TOKEN_SIZE, char_clean = CHAR_CLEAN)
+    token_index = create_index(token_size,char_clean)
+    unique_index = token_index.delete_if{|key, value| value.size > 1}
+    output_dir = Pathname.new(OUTPUT_DIR)
+    output_dir.mkpath if !output_dir.exist?
+    token_file = File.open(File.join(OUTPUT_DIR, TOKEN_FILENAME), "w")
+    word_file = File.open(File.join(OUTPUT_DIR, WORD_FILENAME), "w")
+    unique_index.each do |key, value|
+      token_file.puts key
+      word_file.puts value
+    end  
+    token_file.close
+    word_file.close
   end
   private
   

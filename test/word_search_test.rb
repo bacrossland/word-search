@@ -12,12 +12,23 @@ class WordSearchTest < Test::Unit::TestCase
   WS_CONFIG = YAML.load_file("config/word_search.yaml")
   DICTIONARY_PATH = WS_CONFIG["dictionary_path"]
   TOKEN_SIZE = WS_CONFIG["token_size"]
+  CHAR_CLEAN = WS_CONFIG["char_clean"]
+  WS_CONFIG["output_dir"] ||= "tmp"
+  OUTPUT_DIR = WS_CONFIG["output_dir"]
+  WS_CONFIG["token_filename"] ||= "questions.txt"
+  TOKEN_FILENAME = WS_CONFIG["token_filename"]
+  WS_CONFIG["word_filename"] ||= "answers.txt"
+  WORD_FILENAME = WS_CONFIG["word_filename"]
   
   # This test checks to see if dictionary file is present. 
   def test_config
     dictionary_path = Pathname.new(DICTIONARY_PATH)
     assert(dictionary_path.exist?, "The dictionary_path file '#{DICTIONARY_PATH}' does not exist.")
     assert_instance_of(Fixnum, TOKEN_SIZE) unless TOKEN_SIZE.nil?
+    assert_instance_of(String, CHAR_CLEAN) unless CHAR_CLEAN.nil?
+    assert_instance_of(String, OUTPUT_DIR)
+    assert_instance_of(String, TOKEN_FILENAME)
+    assert_instance_of(String, WORD_FILENAME)
   end
   
   # A test of the WordSearch class initialize method.
@@ -98,7 +109,14 @@ class WordSearchTest < Test::Unit::TestCase
     assert_equal(b_hash, a.create_index(4,"numbers"))
     assert_equal(c_hash, a.create_index(4,"non-word"))
     assert_equal(d_hash, a.create_index(4,"junk words"))
-  end     
+  end
+  
+  # A test of the q_and_a WordSearch public instance method.
+  def test_q_and_a
+    a = WordSearch.new("test/data/test_dictionary.txt")
+    assert_nothing_raised{a.q_and_a(4,"both")}
+    #assert_equal("fdd",a.q_and_a(4,"both"))
+  end       
 end
 
 

@@ -4,7 +4,13 @@
 #   token_size = size of the token to create. Must be an Integer greater than zero (0).
 #   char_clean = type of characters to remove from the tokens. If left blank none will be removed.
 #                Spaces will always be removed. Options: numbers, non-word, both.
+#   output_dir = the directory to output the questions.txt and answers.txt files. Default is tmp.
+#   token_filename = name of the token output file. Default is questions.txt.
+#   word_filename = name of the values output file. Default is answers.txt.
 #
 dictionary_path: data/words.txt
 token_size: 4
 char_clean: both
+output_dir: tmp
+token_filename: questions.txt
+word_filename: answers.txt
