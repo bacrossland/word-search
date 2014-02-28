@@ -35,6 +35,7 @@ class WordSearchTest < Test::Unit::TestCase
     e = WordSearch.new.tokenizer("guild", 5)
     f = WordSearch.new.tokenizer("guild", 0)
     g = WordSearch.new.tokenizer("guild", 6)
+    h = WordSearch.new.tokenizer("guild", -3)
     assert_instance_of(Array, a)
     assert_equal(["g","u","i","l","d"], a)
     assert_equal(["gu","ui","il","ld"], b)
@@ -43,13 +44,14 @@ class WordSearchTest < Test::Unit::TestCase
     assert_equal(["guild"], e)
     assert_equal(["g","u","i","l","d"], f)
     assert_equal([], g)
+    assert_equal(["g","u","i","l","d"], h)
   end  
   
   # A test of the indexer WordSearch private instance method.
   def test_indexer
     a = WordSearch.new.indexer("guild", ["g","u","i","l","d"])
     assert_instance_of(Hash, a)
-    assert_equal({"g"=>"guild","u"=>"guild","i"=>"guild","l"=>"guild","d"=>"guild"}, a)
+    assert_equal({"g"=>["guild"],"u"=>["guild"],"i"=>["guild"],"l"=>["guild"],"d"=>["guild"]}, a)
   end
   
   # A test of the cleaner WordSearch private instance method.
@@ -58,12 +60,45 @@ class WordSearchTest < Test::Unit::TestCase
     b = WordSearch.new.cleaner("g#uild!e---d", "non-word")
     c = WordSearch.new.cleaner("g3#1ui4ld!e-5--d8", "both")
     d = WordSearch.new.cleaner("    mat rules   ")
+    e = WordSearch.new.cleaner("G3#1ui4lD!e-5--d8", "both")
     assert_instance_of(String, a)
     assert_equal("guilded", a)
     assert_equal("guilded", b)
     assert_equal("guilded", c)
     assert_equal("matrules", d)
-  end    
+    assert_equal("guilded", e)
+  end 
+  
+  # A test of the create_index WordSearch public instance method.
+  def test_create_index
+    a = WordSearch.new("test/data/test_data.txt")
+    a_hash = {"four" => ["Four"], "tour" => ["tour"], "sear" => ["search"], 
+      "earc"=> ["search"], "arch"=>["search"], "than"=>["th!an#k"], 
+      "hank"=>["th!an#k","hanks"], "leav"=>["leaves"], "eave"=>["leaves"], 
+      "aves"=>["leaves"], "anks"=>["hanks"]}
+    b_hash = {"four" => ["Four"], "tour" => ["tour"], "sear" => ["search"], 
+      "earc"=> ["search"], "arch"=>["search"], "th!a"=>["th!an#k"],
+      "h!an"=>["th!an#k"], "!an#"=>["th!an#k"], "an#k"=>["th!an#k"],
+      "leav"=>["leaves"], "eave"=>["leaves"], 
+      "aves"=>["leaves"], "hank"=>["hanks"], "anks"=>["hanks"]}
+    c_hash = {"four" => ["Four"], "tour" => ["tour"], "sear" => ["search"], 
+      "earc"=> ["search"], "arch"=>["search"], "than"=>["th!an#k"], 
+      "hank"=>["th!an#k","hanks"], "501s"=> ["501st"], "01st"=>["501st"],
+      "leav"=>["leaves"], "eave"=>["leaves"], 
+      "aves"=>["leaves"], "anks"=>["hanks"]}
+    d_hash = {"four" => ["Four"], "tour" => ["tour"], "sear" => ["search"], 
+      "earc"=> ["search"], "arch"=>["search"], "th!a"=>["th!an#k"],
+      "h!an"=>["th!an#k"], "!an#"=>["th!an#k"], "an#k"=>["th!an#k"],
+      "501s"=> ["501st"], "01st"=>["501st"],
+      "leav"=>["leaves"], "eave"=>["leaves"], 
+      "aves"=>["leaves"], "hank"=>["hanks"], "anks"=>["hanks"]}      
+
+    assert_instance_of(Hash, a.create_index(4,"both"))
+    assert_equal(a_hash, a.create_index(4,"both"))
+    assert_equal(b_hash, a.create_index(4,"numbers"))
+    assert_equal(c_hash, a.create_index(4,"non-word"))
+    assert_equal(d_hash, a.create_index(4,"junk words"))
+  end     
 end
 
 
