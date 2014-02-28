@@ -2,22 +2,36 @@ require 'test/unit'
 require 'pathname'
 require 'yaml'
 require 'word_search'
-
-# Make private WordSearch methods public for testing.
+#--
+## Make private WordSearch methods public for testing.
+#++
 class WordSearch
     public *self.private_instance_methods(false)
 end
 
+# == WordSearchTest
+#
+# This class tests the WordSearch class.
 class WordSearchTest < Test::Unit::TestCase
+  # WordSearch config file.
   WS_CONFIG = YAML.load_file("config/word_search.yaml")
+  # Path to dictionary file.
   DICTIONARY_PATH = WS_CONFIG["dictionary_path"]
+  # Size of tokens to create.
   TOKEN_SIZE = WS_CONFIG["token_size"]
+  # Types of characters to clean
   CHAR_CLEAN = WS_CONFIG["char_clean"]
+  # Set the default output directory to tmp if not defined in config/word_search.yaml
   WS_CONFIG["output_dir"] ||= "tmp"
+  # Output directory for token and word file creation.
   OUTPUT_DIR = WS_CONFIG["output_dir"]
+  # Set the default token filename to questions.txt if not defined in config/word_search.yaml
   WS_CONFIG["token_filename"] ||= "questions.txt"
+  # Token filename.
   TOKEN_FILENAME = WS_CONFIG["token_filename"]
+  # Set the default word filename to answers.txt if not defined in config/word_search.yaml
   WS_CONFIG["word_filename"] ||= "answers.txt"
+  # Word filename.
   WORD_FILENAME = WS_CONFIG["word_filename"]
   
   # This test checks to see if dictionary file is present. 
@@ -115,7 +129,6 @@ class WordSearchTest < Test::Unit::TestCase
   def test_q_and_a
     a = WordSearch.new("test/data/test_dictionary.txt")
     assert_nothing_raised{a.q_and_a(4,"both")}
-    #assert_equal("fdd",a.q_and_a(4,"both"))
   end       
 end
 
