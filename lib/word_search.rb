@@ -11,17 +11,17 @@ class WordSearch
   DICTIONARY_PATH = WS_CONFIG["dictionary_path"]
   # Size of tokens to create.
   TOKEN_SIZE = WS_CONFIG["token_size"]
-  # Types of characters to clean
+  # Types of characters to clean.
   CHAR_CLEAN = WS_CONFIG["char_clean"]
-  # Set the default output directory to tmp if not defined in config/word_search.yaml
+  # Set the default output directory to tmp if not defined in config/word_search.yaml.
   WS_CONFIG["output_dir"] ||= "tmp"
   # Output directory for token and word file creation.
   OUTPUT_DIR = WS_CONFIG["output_dir"]
-  # Set the default token filename to questions.txt if not defined in config/word_search.yaml
+  # Set the default token filename to questions.txt if not defined in config/word_search.yaml.
   WS_CONFIG["token_filename"] ||= "questions.txt"
   # Token filename.
   TOKEN_FILENAME = WS_CONFIG["token_filename"]
-  # Set the default word filename to answers.txt if not defined in config/word_search.yaml
+  # Set the default word filename to answers.txt if not defined in config/word_search.yaml.
   WS_CONFIG["word_filename"] ||= "answers.txt"
   # Word filename.
   WORD_FILENAME = WS_CONFIG["word_filename"]
@@ -43,6 +43,9 @@ class WordSearch
   # This method creates the token index. It takes optional Fixnum and String arguements to override default token_size and char_clean repsectively. 
   # Returns a Hash. Defaults are set in config/word_search.yaml.
   def create_index(token_size = TOKEN_SIZE, char_clean = CHAR_CLEAN)
+    clean_str = ""
+    token_arr = []
+    line_index = {}
     token_index = {}
     @dictionary_file.each_line do |line|
       org_value = line.gsub(/\s/,"")
@@ -50,7 +53,7 @@ class WordSearch
         clean_str = cleaner(line,char_clean)
         token_arr = tokenizer(clean_str, token_size)
         line_index = indexer(org_value, token_arr)
-        token_index = token_index.merge(line_index){|key,oldval,newval| oldval << newval[0] }
+        token_index = token_index.merge!(line_index){|key,oldval,newval| oldval << newval[0] }
       end
     end
     # Sort the resulting Hash alphabetically by key. Return the newly sorted Hash.
