@@ -37,4 +37,16 @@ namespace :word_search do
     end    
     puts "Generation complete."
   end
+  
+  desc 'Benchmark Word-Search: includes file generation.'
+  task :qa_benchmark do
+    a = WordSearch.new
+    puts "Benchmark started..."
+    Benchmark.bmbm do |bm|
+      bm.report("sec:") do
+        a.q_and_a
+      end
+    end    
+    puts "Benchmark complete."
+  end
 end

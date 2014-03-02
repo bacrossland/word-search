@@ -43,6 +43,24 @@ options are as follows:
    token_filename = name of the token output file. Default is questions.txt.
    word_filename = name of the values output file. Default is answers.txt.	
 
+### Benchmark
+
+Word-Search was written and tested with Ruby 1.9.3. Testing and benchmarking was done against a system running 
+Fedora 18 with an Intel Core i7 - 3630QM, 2.4GHz processor and 8GB RAM. 
+
+To run the benchmark test on your system use the follow:
+
+	rake word_search:qa_benchmark
+
+The benchmark results from the test system are as follows:
+
+	Rehearsal ----------------------------------------
+	sec:   0.500000   0.010000   0.510000 (  0.512523)
+	------------------------------- total: 0.510000sec
+	
+	           user     system      total        real
+	sec:   0.450000   0.000000   0.450000 (  0.454294)	
+
 ### Why was Word-Search created?
 
 Word-Search was created to answer the following challenge:
