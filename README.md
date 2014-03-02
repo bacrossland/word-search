@@ -35,19 +35,19 @@ There are other commands availible through rake. To see them run:
 Word-Search can be configured by changing the parameters in the config/word_search.yaml file. Configuration
 options are as follows:
 
-   dictionary_path = path to the dictionary file.
-   token_size = size of the token to create. Must be an Integer greater than zero (0).
-   char_clean = type of characters to remove from the tokens. If left blank none will be removed.
-                Spaces will always be removed. Options: numbers, non-word, both.
-   output_dir = the directory to output the questions.txt and answers.txt files. Default is tmp.
-   token_filename = name of the token output file. Default is questions.txt.
-   word_filename = name of the values output file. Default is answers.txt.	
+	dictionary_path = path to the dictionary file.
+	token_size = size of the token to create. Must be an Integer greater than zero (0).
+	char_clean = type of characters to remove from the tokens. If left blank none will be removed.
+				Spaces will always be removed. Options: numbers, non-word, both.
+	output_dir = the directory to output the questions.txt and answers.txt files. Default is tmp.
+	token_filename = name of the token output file. Default is questions.txt.
+	word_filename = name of the values output file. Default is answers.txt.	
 
 ### Benchmark
 
 Word-Search was written and tested with Ruby 1.9.3. Testing and benchmarking was done against a system running 
-Fedora 18 with an Intel Core i7 - 3630QM, 2.4GHz processor and 8GB RAM. The token size was 4 and char_clean was set
-to "both".
+Fedora 18 with an Intel Core i7 - 3630QM, 2.4GHz processor and 8GB RAM. The token_size was 4, char_clean was set
+to "both", and dictionary_path used the provided data/words.txt file.
 
 To run the benchmark test on your system use the follow:
 
