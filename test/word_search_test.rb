@@ -128,7 +128,8 @@ class WordSearchTest < Test::Unit::TestCase
   # A test of the q_and_a WordSearch public instance method.
   def test_q_and_a
     a = WordSearch.new("test/data/test_dictionary.txt")
-    assert_nothing_raised{a.q_and_a(4,"both")}
+    assert_nothing_raised{a.q_and_a(4,"both","y")}
+    puts "test files"
   end       
 end
 

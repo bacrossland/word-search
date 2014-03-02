@@ -65,15 +65,20 @@ class WordSearch
   # This method generates the question and answer files from the Hash returned by create_index. The Hash has all key/value pairs removed
   # where the value Array has a size greater than 1. The remaining key/value pairs are output into two files; keys to questions.txt and 
   # values to answers.txt with each line of the file holding a single key or value respectively. The keys will be unique while the values 
-  # might not be. The method takes optional Fixnum and String arguements to override default token_size and char_clean repsectively. 
-  # Defaults are set in config/word_search.yaml.
-  def q_and_a(token_size = TOKEN_SIZE, char_clean = CHAR_CLEAN)
+  # might not be. The method takes optional Fixnum and String arguements to override default token_size and char_clean repsectively.
+  # It also take an optional single String agruement for testing.  If test is set to 'y' it will print results to files prepending 'test-'
+  # to the name. Defaults are set in config/word_search.yaml.
+  def q_and_a(token_size = TOKEN_SIZE, char_clean = CHAR_CLEAN, test = "n")
+    prepend_char = ""
+    if test == "y"
+      prepend_char = "test-"
+    end
     token_index = create_index(token_size,char_clean)
     unique_index = token_index.delete_if{|key, value| value.size > 1}
     output_dir = Pathname.new(OUTPUT_DIR)
     output_dir.mkpath if !output_dir.exist?
-    token_file = File.open(File.join(OUTPUT_DIR, TOKEN_FILENAME), "w")
-    word_file = File.open(File.join(OUTPUT_DIR, WORD_FILENAME), "w")
+    token_file = File.open(File.join(OUTPUT_DIR, prepend_char + TOKEN_FILENAME), "w")
+    word_file = File.open(File.join(OUTPUT_DIR, prepend_char + WORD_FILENAME), "w")
     unique_index.each do |key, value|
       token_file.puts key
       word_file.puts value
