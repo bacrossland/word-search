@@ -46,7 +46,8 @@ options are as follows:
 ### Benchmark
 
 Word-Search was written and tested with Ruby 1.9.3. Testing and benchmarking was done against a system running 
-Fedora 18 with an Intel Core i7 - 3630QM, 2.4GHz processor and 8GB RAM. 
+Fedora 18 with an Intel Core i7 - 3630QM, 2.4GHz processor and 8GB RAM. The token size was 4 and char_clean was set
+to "both".
 
 To run the benchmark test on your system use the follow:
 
