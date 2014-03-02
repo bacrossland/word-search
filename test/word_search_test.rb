@@ -129,7 +129,6 @@ class WordSearchTest < Test::Unit::TestCase
   def test_q_and_a
     a = WordSearch.new("test/data/test_dictionary.txt")
     assert_nothing_raised{a.q_and_a(4,"both","y")}
-    puts "test files"
   end       
 end
 
